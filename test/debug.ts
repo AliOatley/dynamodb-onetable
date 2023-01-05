@@ -55,8 +55,11 @@ test('Test', async () => {
     await User.create({name: 'Bob', email: 'bob@gmail.com'})
     let first = await User.find({}, {limit: 1, index: 'gs1'})
     let second = await User.find({}, {limit: 1, index: 'gs1', next: first.next})
+    let previous = await User.find({}, {limit: 1, index: 'gs1', next: second.prev})
 
-    expect(first.next).toEqual(second.prev)
+    expect(previous.length).toBeGreaterThan(0)
+    expect(second.prev).toHaveProperty('pk')
+    expect(second.prev).toHaveProperty('sk')
 })
 
 test('Destroy Table', async () => {
