@@ -50,12 +50,13 @@ test('Create Table', async () => {
 })
 
 test('Test', async () => {
-    /*
-    Put your code here
-
     let User = table.getModel('User')
-    let users = await User.find({})
-*/
+    await User.create({name: 'Ann', email: 'ann@gmail.com'})
+    await User.create({name: 'Bob', email: 'bob@gmail.com'})
+    let first = await User.find({}, {limit: 1, index: 'gs1'})
+    let second = await User.find({}, {limit: 1, index: 'gs1', next: first.next})
+
+    expect(first.next).toEqual(second.prev)
 })
 
 test('Destroy Table', async () => {
