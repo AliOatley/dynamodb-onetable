@@ -50,12 +50,13 @@ test('Create Table', async () => {
 })
 
 test('Test', async () => {
+    let log = true;
     let User = table.getModel('User')
     await User.create({name: 'Ann', email: 'ann@gmail.com'})
     await User.create({name: 'Bob', email: 'bob@gmail.com'})
-    let first = await User.find({}, {limit: 1, index: 'gs1'})
-    let second = await User.find({}, {limit: 1, index: 'gs1', next: first.next})
-    let previous = await User.find({}, {limit: 1, index: 'gs1', next: second.prev})
+    let first = await User.find({}, {limit: 1, index: 'gs1', log})
+    let second = await User.find({}, {limit: 1, index: 'gs1', next: first.next, log})
+    let previous = await User.find({}, {limit: 1, index: 'gs1', next: second.prev, log})
 
     expect(previous.length).toBeGreaterThan(0)
     expect(second.prev).toHaveProperty('pk')
