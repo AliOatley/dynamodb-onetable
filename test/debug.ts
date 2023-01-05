@@ -55,8 +55,8 @@ test('Test1', async () => {
     await User.create({name: 'John', email: 'john@gmail.com'})
     await User.create({name: 'Tim', email: 'tim@gmail.com'})
     let first = await User.find({}, {limit: 1})
-    let second = await User.find({}, {limit: 1})
-    let previous = await User.find({}, {limit: 1})
+    let second = await User.find({}, {limit: 1, next: first.next})
+    let previous = await User.find({}, {limit: 1, next: second.prev})
 
     expect(second.prev).toHaveProperty('pk')
     expect(second.prev).toHaveProperty('sk')
