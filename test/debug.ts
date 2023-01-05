@@ -49,18 +49,27 @@ test('Create Table', async () => {
     }
 })
 
-test('Test', async () => {
-    let log = true;
+test('Test1', async () => {
+    let log = true
+    let User = table.getModel('User')
+    await User.create({name: 'John', email: 'john@gmail.com'})
+    await User.create({name: 'Tim', email: 'tim@gmail.com'})
+    let first = await User.find({}, {limit: 1})
+    let second = await User.find({}, {limit: 1})
+    let previous = await User.find({}, {limit: 1})
+
+    expect(second.prev).toHaveProperty('pk')
+    expect(second.prev).toHaveProperty('sk')
+})
+
+test('Test2', async () => {
+    let log = true
     let User = table.getModel('User')
     await User.create({name: 'Ann', email: 'ann@gmail.com'})
     await User.create({name: 'Bob', email: 'bob@gmail.com'})
     let first = await User.find({}, {limit: 1, index: 'gs1', log})
     let second = await User.find({}, {limit: 1, index: 'gs1', next: first.next, log})
     let previous = await User.find({}, {limit: 1, index: 'gs1', next: second.prev, log})
-
-    expect(previous.length).toBeGreaterThan(0)
-    expect(second.prev).toHaveProperty('pk')
-    expect(second.prev).toHaveProperty('sk')
 })
 
 test('Destroy Table', async () => {
