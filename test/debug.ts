@@ -49,13 +49,30 @@ test('Create Table', async () => {
     }
 })
 
-test('Test', async () => {
-    /*
-    Put your code here
-
+test('Test1', async () => {
+    let log = true
     let User = table.getModel('User')
-    let users = await User.find({})
-*/
+    await User.create({name: 'John', email: 'john@gmail.com'})
+    await User.create({name: 'Tim', email: 'tim@gmail.com'})
+    let first = await User.find({}, {limit: 1})
+    let second = await User.find({}, {limit: 1, next: first.next})
+    let previous = await User.find({}, {limit: 1, prev: second.prev})
+
+    expect(second.prev).toHaveProperty('pk')
+    expect(second.prev).toHaveProperty('sk')
+})
+
+test('Test2', async () => {
+    let log = true
+    let User = table.getModel('User')
+    await User.create({name: 'Ann', email: 'ann@gmail.com'})
+    await User.create({name: 'Bob', email: 'bob@gmail.com'})
+    let first = await User.find({}, {limit: 1, index: 'gs1', log})
+    let second = await User.find({}, {limit: 1, index: 'gs1', next: first.next, log})
+    let previous = await User.find({}, {limit: 1, index: 'gs1', prev: second.prev, log})
+
+    expect(second.prev).toHaveProperty('pk')
+    expect(second.prev).toHaveProperty('sk')
 })
 
 test('Destroy Table', async () => {
